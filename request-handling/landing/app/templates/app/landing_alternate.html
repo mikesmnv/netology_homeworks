@@ -1,4 +1,4 @@
-{% extends "_base.html" %}
+{% extends "app/_base.html" %}
 
 {% load static %}
 
@@ -10,10 +10,10 @@
     </div>
   </nav>
 
-  <img class="responsive-img" src="{% static "img/animal-blur-close-up-840326.jpg" %}">
+  <img class="responsive-img" src="static/img/animal-blur-close-up-840326.jpg">
 
   <div class="row center">
-    <a href="{% url "index" %}?from-landing=test" id="download-button" class="btn-large waves-effect waves-light teal lighten-1">
+    <a href="index?from-landing=test" id="download-button" class="btn-large waves-effect waves-light teal lighten-1">
       Кликни на ссылочку!</a>
   </div>
 {% endblock %}

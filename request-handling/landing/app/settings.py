@@ -75,7 +75,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 
-SECRET_KEY = 'put your secret here'
+SECRET_KEY = 'susfudy34765769ughkjsjhr33hjj35h6j235gjskv8c3556yrufxchf'
 DEBUG = True
 
 try:
