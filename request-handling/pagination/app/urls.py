@@ -1,9 +1,9 @@
 from django.urls import path
 
-from app.views import index, bus_stations
+from app import views
 
 
 urlpatterns = [
-    path('', index, name='index'),
-    path('bus_stations', bus_stations, name='bus_stations'),
+    path('', views.index, name='index'),
+    path('bus_stations', views.bus_stations, name='bus_stations'),
 ]
