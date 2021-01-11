@@ -40,7 +40,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
 
-    'measurements',
+    'measurements_new',
 ]
 
 MIDDLEWARE = [
@@ -80,7 +80,9 @@ WSGI_APPLICATION = 'simple_crud.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'netology_simple_crud',
+        'NAME': 'testbase',
+        'USER': 'postgres',
+        'PASSWORD': 'admin1551',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }

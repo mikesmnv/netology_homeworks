@@ -74,7 +74,9 @@ WSGI_APPLICATION = 'website.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'netology_m2m_relations',
+        'NAME': 'testbase',
+        'USER': 'postgres',
+        'PASSWORD': 'admin1551',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
@@ -131,3 +133,23 @@ try:
 except ImportError:
     pass
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django.db': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
