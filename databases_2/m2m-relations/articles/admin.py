@@ -9,11 +9,12 @@ class TagListInlineFormset(BaseInlineFormSet):
         i = 0
         for form in self.forms:
             dataList = form.cleaned_data
-            if dataList["mainTag"] == True:
-               i += 1
+            print(dataList)
+            if dataList['mainTag'] == True:
+                i += 1
         if i > 1:
-            raise ValidationError('Тут всегда ошибка')
-        return super().clean()  # вызываем базовый код переопределяемого метода
+            raise ValidationError('Основной раздел должен быть только один')
+        return super().clean()
 
 
 class TagListInLine(admin.TabularInline):

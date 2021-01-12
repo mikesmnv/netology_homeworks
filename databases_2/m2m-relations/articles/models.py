@@ -21,7 +21,6 @@ class Article(models.Model):
 class Tag(models.Model):
     name = models.TextField(verbose_name='Название')
 
-
     class Meta:
         verbose_name = 'Раздел'
         verbose_name_plural = 'Разделы'
