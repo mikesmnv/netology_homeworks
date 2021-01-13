@@ -30,7 +30,8 @@ class Tag(models.Model):
 
 
 class Tag_list(models.Model):
-    article = models.ForeignKey("Article", on_delete=models.CASCADE)
+    article = models.ForeignKey("Article", on_delete=models.CASCADE,
+                                related_name="tags")
     tag = models.ForeignKey("Tag", on_delete=models.CASCADE)
     mainTag = models.BooleanField(verbose_name='Основной')
 
