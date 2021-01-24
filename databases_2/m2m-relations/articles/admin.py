@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.forms import BaseInlineFormSet
-from .models import Article, Tag, Tag_list
+from .models import Article, Tag, TagList
 
 
 class TagListInlineFormset(BaseInlineFormSet):
@@ -18,7 +18,7 @@ class TagListInlineFormset(BaseInlineFormSet):
 
 
 class TagListInLine(admin.TabularInline):
-    model = Tag_list
+    model = TagList
     formset = TagListInlineFormset
 
 @admin.register(Tag)

@@ -7,7 +7,7 @@ class Article(models.Model):
     published_at = models.DateTimeField(verbose_name='Дата публикации')
     image = models.ImageField(null=True, blank=True, verbose_name='Изображение')
     scopes = models.ManyToManyField("Tag",
-                                     through="Tag_list",
+                                     through="TagList",
                                      verbose_name='Тематики статьи')
 
     class Meta:
@@ -29,7 +29,7 @@ class Tag(models.Model):
         return self.name
 
 
-class Tag_list(models.Model):
+class TagList(models.Model):
     article = models.ForeignKey("Article", on_delete=models.CASCADE,
                                 related_name="tags")
     tag = models.ForeignKey("Tag", on_delete=models.CASCADE)
