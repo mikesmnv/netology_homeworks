@@ -1,7 +1,11 @@
 from django.contrib import admin
-
+from django.forms import BaseInlineFormSet
 from api.models import Product, OrderPosition, \
     ProductReview, Order, ProductCollection
+
+
+class OrderPositionInLine(admin.TabularInline):
+    model = OrderPosition
 
 
 class ProductAdmin(admin.ModelAdmin):
@@ -13,11 +17,7 @@ class ProductCollectionAdmin(admin.ModelAdmin):
 
 
 class OrderAdmin(admin.ModelAdmin):
-    pass
-
-
-class OrderPositionAdmin(admin.ModelAdmin):
-    pass
+    inlines = [OrderPositionInLine]
 
 
 class ProductReviewAdmin(admin.ModelAdmin):
@@ -25,7 +25,6 @@ class ProductReviewAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Product, ProductAdmin)
-admin.site.register(OrderPosition, OrderPositionAdmin)
 admin.site.register(ProductReview, ProductReviewAdmin)
 admin.site.register(Order, OrderAdmin)
 admin.site.register(ProductCollection, ProductCollectionAdmin)

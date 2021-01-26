@@ -1,4 +1,13 @@
 from django.db import models
+from django.contrib import auth
+
+score_choises = (
+    (1, '1'),
+    (2, '2'),
+    (3, '3'),
+    (4, '4'),
+    (5, '5'),
+)
 
 
 class Product(models.Model):
@@ -20,28 +29,14 @@ class Product(models.Model):
         return f"{self.id} : {self.name}"
 
 
-class User(models.Model):
-    name = models.CharField(max_length=25)
-    password = models.CharField(max_length=10)
-    email = models.EmailField()
-#    token = models.CharField(max_length=15)
-
-    class Meta:
-        verbose_name = 'Пользователь'
-        verbose_name_plural = 'Пользователи'
-
-    def __str__(self):
-        return f"{self.id} : {self.name}"
-
-
 class ProductReview(models.Model):
     id = models.PositiveIntegerField()
-    author_id = models.ForeignKey(User, on_delete=models.CASCADE,
+    author_id = models.ForeignKey("auth.User", on_delete=models.CASCADE,
                                   primary_key=True, related_name="review")
     product_id = models.ForeignKey(Product, on_delete=models.CASCADE,
                                    related_name="reviews")
     review = models.TextField()
-    score = models.PositiveIntegerField()
+    score = models.PositiveIntegerField(choices=score_choises)
     created_at = models.DateTimeField(
         auto_now_add=True
     )
@@ -68,7 +63,7 @@ class OrderPosition(models.Model):
         verbose_name_plural = 'Заказы'
 
     def __str__(self):
-        return f"{Order.user_id} : {Order.user_id}"
+        return f"{Order.user_id} : {self.product_id}"
 
 
 class StatusChoices(models.TextChoices):
@@ -78,11 +73,11 @@ class StatusChoices(models.TextChoices):
 
 
 class Order(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
+    user_id = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name="orders")
     position = models.ManyToManyField(Product, through=OrderPosition,
                                       related_name="orders")
     status = models.TextField(choices=StatusChoices.choices)
-    price = models.DecimalField(max_digits=12, decimal_places=2)
+    full_price = models.DecimalField(max_digits=12, decimal_places=2)
     created_at = models.DateTimeField(
         auto_now_add=True
     )
