@@ -12,13 +12,13 @@ class OrderFilters(filters.FilterSet):
         to_field_name="id",
     )
     status = filters.CharFilter(lookup_expr="iexact")
-    price = filters.RangeFilter()
+    full_price = filters.RangeFilter()
     created_at = filters.DateFilter()
     updated_at = filters.DateFilter()
 
     class Meta:
         model = Order
-        fields = ("status", "price", "created_at", "updated_at")
+        fields = ("status", "full_price", "created_at", "updated_at")
 
 
 class ProductFilters(filters.FilterSet):

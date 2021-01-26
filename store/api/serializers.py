@@ -23,7 +23,7 @@ class OrderPositionSerializer(serializers.ModelSerializer):
 class OrderSerializer(serializers.ModelSerializer):
 
     positions = OrderPositionSerializer(many=True,
-                                              required=True)
+                                        required=True)
 
     class Meta:
         model = Order

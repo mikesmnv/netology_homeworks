@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.forms import BaseInlineFormSet
 from api.models import Product, OrderPosition, \
     ProductReview, Order, ProductCollection
 

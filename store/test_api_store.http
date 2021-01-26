@@ -1,0 +1,29 @@
+GET http://localhost:8000/api/v1/orders/?full_price_min=50000
+Content-Type: application/json
+###
+GET http://localhost:8000/api/v1/products/
+Content-Type: application/json
+###
+GET http://localhost:8000/api/v1/product-reviews/
+Content-Type: application/json
+###
+GET http://localhost:8000/api/v1/product-collections/
+Content-Type: application/json
+###
+POST http://localhost:8000/api/v1/orders/
+Content-Type: application/json
+Authorization: admin admin1551
+
+{
+    "id": 2,
+    "user_id": 2,
+    "positions": [
+      {
+        "id": 2,
+        "product_id": 2,
+        "quantity": 2
+      }
+    ],
+    "status": "Нов",
+    "full_price": "120000.00"
+}
