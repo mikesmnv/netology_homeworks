@@ -1,29 +1,42 @@
 GET http://localhost:8000/api/v1/orders/?full_price_min=50000
 Content-Type: application/json
+
 ###
 GET http://localhost:8000/api/v1/products/
 Content-Type: application/json
+
 ###
 GET http://localhost:8000/api/v1/product-reviews/
 Content-Type: application/json
+Authorization: Token 23c447c408305cf0f99cf3a21a8fb9e11890ee8d
+
 ###
 GET http://localhost:8000/api/v1/product-collections/
 Content-Type: application/json
+Authorization: Token 23c447c408305cf0f99cf3a21a8fb9e11890ee8d
+
 ###
 POST http://localhost:8000/api/v1/orders/
 Content-Type: application/json
-Authorization: admin admin1551
+Authorization: Token 23c447c408305cf0f99cf3a21a8fb9e11890ee8d
 
 {
-    "id": 2,
     "user_id": 2,
     "positions": [
       {
-        "id": 2,
         "product_id": 2,
         "quantity": 2
       }
     ],
     "status": "Нов",
     "full_price": "120000.00"
+}
+
+###
+PUT  http://localhost:8000/api/v1/product-reviews/
+Content-Type: application/json
+Authorization: Token 23c447c408305cf0f99cf3a21a8fb9e11890ee8d
+
+{
+  "score": 5
 }

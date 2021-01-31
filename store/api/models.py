@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.contrib import auth
 
@@ -49,21 +51,21 @@ class ProductReview(models.Model):
         verbose_name_plural = 'Отзывы'
 
     def __str__(self):
-        return f"{self.id} : {self.created_at}"
+        return f"{self.id} : {datetime.datetime.date(self.created_at)}"
 
 
 class OrderPosition(models.Model):
-    product_id = models.ForeignKey(Product, on_delete=models.CASCADE)
-    order_id = models.ForeignKey("Order", on_delete=models.CASCADE,
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    order = models.ForeignKey("Order", on_delete=models.CASCADE,
                                  related_name="positions")
     quantity = models.PositiveIntegerField()
 
     class Meta:
-        verbose_name = 'Заказ'
-        verbose_name_plural = 'Заказы'
+        verbose_name = 'Информация о заказе'
+        verbose_name_plural = 'Информация о заказах'
 
     def __str__(self):
-        return f"{Order.user_id} : {self.product_id}"
+        return f"{self.order.user_id} : {self.product_id}"
 
 
 class StatusChoices(models.TextChoices):
@@ -77,7 +79,9 @@ class Order(models.Model):
     position = models.ManyToManyField(Product, through=OrderPosition,
                                       related_name="orders")
     status = models.TextField(choices=StatusChoices.choices)
-    full_price = models.DecimalField(max_digits=12, decimal_places=2)
+    full_price = models.DecimalField(max_digits=12, decimal_places=2,
+                                     blank=True,
+                                     null=True)
     created_at = models.DateTimeField(
         auto_now_add=True
     )
@@ -86,12 +90,12 @@ class Order(models.Model):
     )
 
     class Meta:
-        verbose_name = 'Информация о заказе'
-        verbose_name_plural = 'Информация о заказах'
+        verbose_name = 'Заказ'
+        verbose_name_plural = 'Заказы'
         ordering = ["created_at"]
 
     def __str__(self):
-        return f"{self.id} : {self.created_at}"
+        return f"{self.id} : {datetime.datetime.date(self.created_at)}"
 
 
 class ProductCollection(models.Model):

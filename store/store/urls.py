@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from api.views import *
+from rest_framework.authtoken import views
 
 router = DefaultRouter()
 router.register("products", ProductViewset)
@@ -31,4 +32,5 @@ urlpatterns = [
 
 urlpatterns += [
     path('api-auth/', include('rest_framework.urls')),
+    path('api-token-auth/', views.obtain_auth_token)
 ]

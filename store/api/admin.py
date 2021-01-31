@@ -3,6 +3,10 @@ from api.models import Product, OrderPosition, \
     ProductReview, Order, ProductCollection
 
 
+class OrderPositionAdmin(admin.ModelAdmin):
+    pass
+
+
 class OrderPositionInLine(admin.TabularInline):
     model = OrderPosition
 
@@ -27,3 +31,4 @@ admin.site.register(Product, ProductAdmin)
 admin.site.register(ProductReview, ProductReviewAdmin)
 admin.site.register(Order, OrderAdmin)
 admin.site.register(ProductCollection, ProductCollectionAdmin)
+admin.site.register(OrderPosition, OrderPositionAdmin)

@@ -40,21 +40,12 @@ class OrderViewset(mixins.CreateModelMixin,
                    mixins.DestroyModelMixin,
                    viewsets.GenericViewSet):
 
-
-    queryset = Order.objects.all()
+    queryset = Order.objects.prefetch_related("position").all()
     serializer_class = OrderSerializer
     filter_backends = [filters.DjangoFilterBackend]
     filterset_class = OrderFilters
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    def create(self, request, *args, **kwargs):
-        sum = 0
-        for order in Order.objects.all().prefetch_related("OrderPosition", "Product"):
-            for product in order.products.all():
-                sum += order.price * product.quantity
-            order.full_price = sum
-        resp = super().create(request, *args, **kwargs)
-        return resp
 
 class CollectionViewset(mixins.CreateModelMixin,
                    mixins.RetrieveModelMixin,
@@ -62,7 +53,6 @@ class CollectionViewset(mixins.CreateModelMixin,
                    mixins.ListModelMixin,
                    mixins.DestroyModelMixin,
                    viewsets.GenericViewSet):
-
 
     queryset = ProductCollection.objects.all()
     serializer_class = ProductCollectionSerializer
