@@ -20,10 +20,10 @@ from api.views import *
 from rest_framework.authtoken import views
 
 router = DefaultRouter()
-router.register("products", ProductViewset)
-router.register("product-reviews", ProductReviewViewset)
-router.register("orders", OrderViewset)
-router.register("product-collections", CollectionViewset)
+router.register("products", ProductViewset, basename="products")
+router.register("product-reviews", ProductReviewViewset, basename="product-reviews")
+router.register("orders", OrderViewset, basename="orders")
+router.register("product-collections", CollectionViewset, basename="product-collections")
 
 urlpatterns = [
     path('admin/', admin.site.urls),

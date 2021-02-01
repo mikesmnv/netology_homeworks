@@ -29,10 +29,18 @@ class OrderSerializer(serializers.ModelSerializer):
                   "full_price", "created_at", "updated_at")
 
     def create(self, validated_data):
+        print(validated_data)
         order_positions_data = validated_data.pop("positions")
         full_price = 0
-        order = super().create(validated_data)
+        # order = super().create(validated_data)
         raw_order_positions = []
+        for order_position in order_positions_data:
+            full_price += Product.objects.get(id=order_position["product"].id).price * \
+                      order_position["quantity"]
+        order = Order(user_id=validated_data["user_id"],
+                      status=validated_data["status"],
+                      full_price=full_price)
+        order.save()
         for order_position in order_positions_data:
             position = OrderPosition(
                  order=order,
@@ -40,10 +48,7 @@ class OrderSerializer(serializers.ModelSerializer):
                  quantity=order_position["quantity"],
              )
             raw_order_positions.append(position)
-            full_price += Product.objects.get(id=order_position["product"].id).price *\
-                           order_position["quantity"]
         OrderPosition.objects.bulk_create(raw_order_positions)
-        order.full_price = full_price
         return order
 
 
