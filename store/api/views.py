@@ -1,29 +1,32 @@
-from django.shortcuts import render
 from rest_framework import permissions
 from rest_framework import viewsets, mixins
-from api.permissions import IsOwnerOrReadOnly
+from rest_framework.response import Response
+from api.permissions import IsOwnerOrReadOnly, IsAdminOrReadOnly
 from api.serializers import *
 from api.filters import *
 
 
-class ProductViewset(mixins.CreateModelMixin,
-                   mixins.RetrieveModelMixin,
-                   mixins.UpdateModelMixin,
-                   mixins.ListModelMixin,
-                   mixins.DestroyModelMixin,
-                   viewsets.GenericViewSet):
+class ProductViewset(viewsets.ModelViewSet):
 
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [filters.DjangoFilterBackend]
     filterset_class = ProductFilters
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly & IsAdminOrReadOnly]
 
-class ProductReviewViewset(mixins.CreateModelMixin,
+    def create(self, request, *args, **kwargs):
+        print(request.user)
+        if request.user.is_staff:
+            resp = super().create(request, *args, **kwargs)
+            return resp
+        else:
+            return Response({"message": "You are not admin!"})
+
+
+class ProductReviewViewset(mixins.CreateModelMixin,   # API - 2
                    mixins.RetrieveModelMixin,
                    mixins.UpdateModelMixin,
                    mixins.ListModelMixin,
-                   mixins.DestroyModelMixin,
                    viewsets.GenericViewSet):
 
     queryset = ProductReview.objects.all()
@@ -33,12 +36,17 @@ class ProductReviewViewset(mixins.CreateModelMixin,
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly]
 
-class OrderViewset(mixins.CreateModelMixin,
-                   mixins.RetrieveModelMixin,
-                   mixins.UpdateModelMixin,
-                   mixins.ListModelMixin,
-                   mixins.DestroyModelMixin,
-                   viewsets.GenericViewSet):
+    def put(self, request):
+        print(request)
+#        print(request.data)
+        user_id = request.data.pop('author')
+        if request.user.id == user_id:
+#            print(request.data)
+            return super().update(request.data)
+        else:
+            return Response({"message": "You can't change this review!"})
+
+class OrderViewset(viewsets.ModelViewSet):
 
     queryset = Order.objects.prefetch_related("position").all()
     serializer_class = OrderSerializer
@@ -47,12 +55,7 @@ class OrderViewset(mixins.CreateModelMixin,
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
-class CollectionViewset(mixins.CreateModelMixin,
-                   mixins.RetrieveModelMixin,
-                   mixins.UpdateModelMixin,
-                   mixins.ListModelMixin,
-                   mixins.DestroyModelMixin,
-                   viewsets.GenericViewSet):
+class CollectionViewset(viewsets.ModelViewSet):
 
     queryset = ProductCollection.objects.all()
     serializer_class = ProductCollectionSerializer

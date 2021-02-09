@@ -32,10 +32,9 @@ class Product(models.Model):
 
 
 class ProductReview(models.Model):
-    id = models.PositiveIntegerField()
-    author_id = models.ForeignKey("auth.User", on_delete=models.CASCADE,
+    author = models.ForeignKey("auth.User", on_delete=models.CASCADE,
                                   primary_key=True, related_name="review")
-    product_id = models.ForeignKey(Product, on_delete=models.CASCADE,
+    product = models.ForeignKey(Product, on_delete=models.CASCADE,
                                    related_name="reviews")
     review = models.TextField()
     score = models.PositiveIntegerField(choices=score_choises)
@@ -51,13 +50,13 @@ class ProductReview(models.Model):
         verbose_name_plural = 'Отзывы'
 
     def __str__(self):
-        return f"{self.id} : {datetime.datetime.date(self.created_at)}"
+        return f"{self.author} : {datetime.datetime.date(self.created_at)}"
 
 
 class OrderPosition(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     order = models.ForeignKey("Order", on_delete=models.CASCADE,
-                                 related_name="positions")
+                              related_name="positions")
     quantity = models.PositiveIntegerField()
 
     class Meta:
@@ -65,7 +64,7 @@ class OrderPosition(models.Model):
         verbose_name_plural = 'Информация о заказах'
 
     def __str__(self):
-        return f"{self.order.user_id} : {self.product_id}"
+        return f"{self.order.user} : {self.product_id}"
 
 
 class StatusChoices(models.TextChoices):
@@ -75,7 +74,7 @@ class StatusChoices(models.TextChoices):
 
 
 class Order(models.Model):
-    user_id = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name="orders")
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name="orders")
     position = models.ManyToManyField(Product, through=OrderPosition,
                                       related_name="orders")
     status = models.TextField(choices=StatusChoices.choices)

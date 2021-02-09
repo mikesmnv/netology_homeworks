@@ -25,11 +25,11 @@ class OrderSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ("user_id", "positions", "status",
+        fields = ("user", "positions", "status",
                   "full_price", "created_at", "updated_at")
 
     def create(self, validated_data):
-        print(validated_data)
+#        print(validated_data)
         order_positions_data = validated_data.pop("positions")
         full_price = 0
         # order = super().create(validated_data)
@@ -37,7 +37,7 @@ class OrderSerializer(serializers.ModelSerializer):
         for order_position in order_positions_data:
             full_price += Product.objects.get(id=order_position["product"].id).price * \
                       order_position["quantity"]
-        order = Order(user_id=validated_data["user_id"],
+        order = Order(user=validated_data["user"],
                       status=validated_data["status"],
                       full_price=full_price)
         order.save()
@@ -55,14 +55,14 @@ class OrderSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = ("name", "description", "price",
+        fields = ("id", "name", "description", "price",
                   "created_at", "updated_at")
 
 
 class ProductReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductReview
-        fields = ("id", "author_id", "product_id",
+        fields = ("author", "product",
                   "review", "score", "created_at", "updated_at")
 
 

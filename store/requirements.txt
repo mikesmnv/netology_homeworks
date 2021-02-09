@@ -1,0 +1,9 @@
+Django==3.1.2
+django-debug-toolbar==3.2
+django-filter==2.4.0
+djangorestframework==3.12.2
+permission==0.4.1
+Pillow==8.0.1
+psycopg2==2.8.6
+pytest==6.2.1
+pytest-django==4.1.0

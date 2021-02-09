@@ -1,9 +1,25 @@
-GET http://localhost:8000/api/v1/orders/?full_price_min=50000
+GET http://localhost:8000/api/v1/orders/?full_price_min=200000
+Content-Type: application/json
+
+###
+GET http://localhost:8000/api/v1/orders/
 Content-Type: application/json
 
 ###
 GET http://localhost:8000/api/v1/products/
 Content-Type: application/json
+#Authorization: Token f9b453a9cba690955cf93a244168c09a3a3e4760
+
+###
+POST http://localhost:8000/api/v1/products/
+Content-Type: application/json
+Authorization: Token f9b453a9cba690955cf93a244168c09a3a3e4760
+
+{
+    "name": "Iphone 5s",
+    "description": "Если всё совсем плохо",
+    "price": 30000.00
+}
 
 ###
 GET http://localhost:8000/api/v1/product-reviews/
@@ -24,12 +40,11 @@ Authorization: Token 23c447c408305cf0f99cf3a21a8fb9e11890ee8d
     "user_id": 2,
     "positions": [
       {
-        "product_id": 2,
+        "product": 2,
         "quantity": 2
       }
     ],
-    "status": "Нов",
-    "full_price": "120000.00"
+    "status": "Нов"
 }
 
 ###
@@ -39,4 +54,13 @@ Authorization: Token 23c447c408305cf0f99cf3a21a8fb9e11890ee8d
 
 {
   "score": 5
+}
+
+###
+PATCH  http://localhost:8000/api/v1/orders/46/
+Content-Type: application/json
+Authorization: Token 23c447c408305cf0f99cf3a21a8fb9e11890ee8d
+
+{
+  "status": "Гот"
 }
