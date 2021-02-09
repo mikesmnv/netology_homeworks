@@ -27,6 +27,20 @@ Content-Type: application/json
 Authorization: Token 23c447c408305cf0f99cf3a21a8fb9e11890ee8d
 
 ###
+
+###
+PUT  http://localhost:8000/api/v1/product-reviews/?id=2/
+Content-Type: application/json
+Authorization: Token 23c447c408305cf0f99cf3a21a8fb9e11890ee8d
+
+  {
+    "author": 2,
+    "product": 1,
+    "review": "Отлично",
+    "score": 5
+  }
+
+###
 GET http://localhost:8000/api/v1/product-collections/
 Content-Type: application/json
 Authorization: Token 23c447c408305cf0f99cf3a21a8fb9e11890ee8d
@@ -37,11 +51,11 @@ Content-Type: application/json
 Authorization: Token 23c447c408305cf0f99cf3a21a8fb9e11890ee8d
 
 {
-    "user_id": 2,
+    "user": 2,
     "positions": [
       {
-        "product": 2,
-        "quantity": 2
+        "product": 1,
+        "quantity": 3
       }
     ],
     "status": "Нов"
