@@ -2,7 +2,6 @@ import pytest
 from django.contrib.auth.models import User
 from django.urls import reverse
 from rest_framework.status import HTTP_200_OK
-from rest_framework.authtoken.models import Token
 
 from api.models import Product, OrderPosition, \
     ProductReview, Order, ProductCollection
@@ -26,12 +25,31 @@ def test_products_get(api_client):
     assert resp_json["id"] == product.id
     assert resp_json["name"] == product.name
 
+@pytest.mark.django_db
+def test_products_list(api_client):
+
+    product1 = Product.objects.create(
+        name="Iphone7",
+        description="text",
+        price=50000
+    )
+    product2 = Product.objects.create(
+        name="Iphone8",
+        description="text",
+        price=70000
+    )
+
+    url = reverse("products-list")
+    resp = api_client.get(url)
+    assert resp.status_code == HTTP_200_OK
+
 
 @pytest.mark.django_db
 def test_orders_get(api_client):
     username = "admin"
     password = "admin1551"
-    User.objects.create_user(id=1, username=username, password=password)
+    User.objects.create_user(username=username, password=password)
+    print(User.pk)
     api_client.login(username=username, password=password)
     product = Product.objects.create(
         name="Iphone7",
@@ -39,7 +57,7 @@ def test_orders_get(api_client):
         price=50000
     )
     order = Order.objects.create(
-#        user=User.id,
+        user=User.pk,
         positions=[{"product": 1, "quantity": 2}],
         status="Нов"
     )
