@@ -48,8 +48,8 @@ def test_products_list(api_client):
 def test_orders_get(api_client):
     username = "admin"
     password = "admin1551"
-    User.objects.create_user(username=username, password=password)
-    print(User.pk)
+    user = User.objects.create_user(username=username, password=password)
+    user.save()
     api_client.login(username=username, password=password)
     product = Product.objects.create(
         name="Iphone7",
@@ -57,7 +57,7 @@ def test_orders_get(api_client):
         price=50000
     )
     order = Order.objects.create(
-        user=User.pk,
+        user=user.id,
         positions=[{"product": 1, "quantity": 2}],
         status="Нов"
     )
