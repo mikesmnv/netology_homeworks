@@ -1,7 +1,7 @@
 import pytest
 from django.contrib.auth.models import User
 from django.urls import reverse
-from rest_framework.status import HTTP_200_OK
+from rest_framework.status import HTTP_200_OK, HTTP_401_UNAUTHORIZED
 
 from api.models import Product, OrderPosition, \
     ProductReview, Order, ProductCollection
@@ -24,6 +24,7 @@ def test_products_get(api_client):
     assert resp_json
     assert resp_json["id"] == product.id
     assert resp_json["name"] == product.name
+
 
 @pytest.mark.django_db
 def test_products_list(api_client):
@@ -57,66 +58,73 @@ def test_orders_get(api_client):
         price=50000
     )
     order = Order.objects.create(
-        user=user.id,
-        positions=[{"product": 1, "quantity": 2}],
+        user=user,
         status="Нов"
     )
+    positions = OrderPosition.objects.create(product=product, order=order, quantity=2)
     url = reverse("orders-detail", args=[order.id])
-
     resp = api_client.get(url)
-
     assert resp.status_code == HTTP_200_OK
-    resp_json = resp.json()
-    assert resp_json
-    assert resp_json["id"] == order.id
 
 
 @pytest.mark.django_db
 def test_product_review_list(api_client):
-
+    username = "admin"
+    password = "admin1551"
+    user1 = User.objects.create_user(username=username, password=password)
+    user1.save()
+    api_client.login(username=username, password=password)
+    product1 = Product.objects.create(
+        name="Iphone7",
+        description="text",
+        price=50000
+    )
+    product2 = Product.objects.create(
+        name="Iphone10",
+        description="text",
+        price=70000
+    )
     review1 = ProductReview.objects.create(
-        id=1,
-        author=1,
-        product=1,
+        author=user1,
+        product=product1,
         review="Good",
         score=4
-
     )
-    review2 = Order.objects.create(
-        id=2,
-        author=1,
-        product=2,
+    url = reverse("product-reviews-detail", args=[user1.id])
+    resp = api_client.get(url)
+    assert resp.status_code == HTTP_200_OK
+    username = "mike"
+    password = "mike1551"
+    user2 = User.objects.create_user(username=username, password=password)
+    user2.save()
+    api_client.login(username=username, password=password)
+    review2 = ProductReview.objects.create(
+        author=user2,
+        product=product2,
         review="so-so",
         score=3
     )
-
     url = reverse("product-reviews-list")
     resp = api_client.get(url)
     assert resp.status_code == HTTP_200_OK
-    resp_json = resp.json()
- #   assert len(resp_json) == 7
 
 
 @pytest.mark.django_db
-def test_orders_filter(api_client):
-
-    order1 = Order.objects.create(
-        user_id=2,
-        status="Выполняется",
-        positions=[{"product": 2, "quantity": 2}]
+def test_collections(api_client):
+    username = "mike"
+    password = "1234567"
+    user = User.objects.create_user(username=username, password=password)
+    user.save()
+    api_client.login(username=username, password=password)
+    product = Product.objects.create(
+        name="Iphone7",
+        description="text",
+        price=50000
     )
-
-    order2 = Order.objects.create(
-        user_id=2,
-        status="Готов",
-        positions=[{"product": 1, "quantity": 1}]
-    )
-
-    url = reverse("orders-list")
-    resp = api_client.get(url, {"status": "Готов"})
-    assert resp.status_code == HTTP_200_OK
-    resp_json = resp.json()
-
-    assert len(resp_json) == 1
-    result = resp_json[0]
-    assert result["id"] == order2.id
+    collection = ProductCollection.objects.create(
+        name="Phones",
+        text="Text"
+        )
+    url = reverse("product-collections-detail", args=[collection.id])
+    resp = api_client.get(url)
+    assert resp.status_code == HTTP_401_UNAUTHORIZED
